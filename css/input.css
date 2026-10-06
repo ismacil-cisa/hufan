@@ -736,6 +736,82 @@ html.dark :focus-visible {
 }
 
 /* =========================================================
+   FLOATING PAGE ACTIONS
+   ========================================================= */
+
+.floating-actions {
+  position: fixed;
+  z-index: 40;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.floating-actions.is-obscured {
+  visibility: hidden;
+}
+
+.floating-action {
+  display: flex;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgb(17 17 17 / 18%);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.floating-action:hover {
+  transform: translateY(-2px);
+}
+
+.floating-action:focus-visible {
+  outline: 3px solid var(--hufan-heading);
+  outline-offset: 3px;
+}
+
+.floating-action svg {
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: currentColor;
+}
+
+.floating-action-whatsapp {
+  background-color: #25d366;
+  color: #ffffff;
+}
+
+.floating-action-whatsapp:hover {
+  background-color: #1da851;
+}
+
+.floating-action-top {
+  border-color: var(--hufan-border);
+  background-color: var(--hufan-panel);
+  color: var(--hufan-heading);
+}
+
+.floating-action-top:hover {
+  background-color: var(--hufan-panel-alt);
+}
+
+.floating-action[hidden] {
+  display: none;
+}
+
+html.dark .floating-action:focus-visible {
+  outline-color: #ffffff;
+}
+
+/* =========================================================
    RESPONSIVE POLISH
    ========================================================= */
 
@@ -758,6 +834,17 @@ html.dark :focus-visible {
     top: 42%;
     width: 4rem;
     height: 4rem;
+  }
+
+  .floating-actions {
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    gap: 0.625rem;
+  }
+
+  .floating-action {
+    width: 3rem;
+    height: 3rem;
   }
 }
 

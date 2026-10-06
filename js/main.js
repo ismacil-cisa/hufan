@@ -638,6 +638,54 @@
     }
   };
 
+  const setupFloatingActions = () => {
+    const actions = document.createElement("div");
+    actions.className = "floating-actions";
+
+    const whatsappLink = document.createElement("a");
+    whatsappLink.className = "floating-action floating-action-whatsapp";
+    whatsappLink.href = `https://wa.me/905391379884?text=${encodeURIComponent("Hello HUFAN, I would like to know more about your services.")}`;
+    whatsappLink.target = "_blank";
+    whatsappLink.rel = "noopener noreferrer";
+    whatsappLink.setAttribute("aria-label", "Contact HUFAN on WhatsApp");
+    whatsappLink.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.52 3.48A11.8 11.8 0 0 0 12.12 0C5.6 0 .3 5.3.3 11.82c0 2.08.54 4.1 1.57 5.88L.2 24l6.45-1.69a11.8 11.8 0 0 0 5.47 1.39h.01c6.52 0 11.82-5.3 11.82-11.82 0-3.16-1.23-6.13-3.43-8.4ZM12.13 21.7h-.01a9.8 9.8 0 0 1-4.99-1.36l-.36-.21-3.83 1 1.02-3.73-.24-.38a9.8 9.8 0 0 1-1.5-5.2c0-5.43 4.42-9.85 9.86-9.85a9.78 9.78 0 0 1 6.97 2.89 9.78 9.78 0 0 1 2.88 6.98c0 5.43-4.42 9.86-9.8 9.86Zm5.4-7.38c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.68-2.08-.17-.3-.02-.46.13-.6.14-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.08-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.1 4.49.71.3 1.27.49 1.7.62.71.23 1.36.2 1.88.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35Z"/></svg>';
+
+    const backToTopButton = document.createElement("button");
+    backToTopButton.className = "floating-action floating-action-top";
+    backToTopButton.type = "button";
+    backToTopButton.setAttribute("aria-label", "Back to top");
+    backToTopButton.hidden = true;
+    backToTopButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5 4 13l1.41 1.41L11 8.83V20h2V8.83l5.59 5.58L20 13l-8-8Z"/></svg>';
+
+    const protectedContent = document.querySelectorAll("#project-form, footer");
+
+    const updateBackToTopVisibility = () => {
+      backToTopButton.hidden = window.scrollY <= 300;
+
+      const actionsRect = actions.getBoundingClientRect();
+      const overlapsProtectedContent = Array.from(protectedContent).some((element) => {
+        const contentRect = element.getBoundingClientRect();
+        return actionsRect.left < contentRect.right
+          && actionsRect.right > contentRect.left
+          && actionsRect.top < contentRect.bottom
+          && actionsRect.bottom > contentRect.top;
+      });
+
+      actions.classList.toggle("is-obscured", overlapsProtectedContent);
+    };
+
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    window.addEventListener("resize", updateBackToTopVisibility);
+    backToTopButton.addEventListener("click", () => {
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+    });
+
+    actions.append(whatsappLink, backToTopButton);
+    document.body.append(actions);
+    updateBackToTopVisibility();
+  };
+
   const setupHeroMotion = () => {
     const heroSection = document.querySelector("#hero");
     const heroGlow = document.querySelector(".hero-glow");
@@ -847,6 +895,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     setupMobileMenu();
     setupNavbarScrollEffect();
+    setupFloatingActions();
     setupHeroMotion();
     setupScrollReveal();
     ensureNavigationControls();
