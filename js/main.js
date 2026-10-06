@@ -657,21 +657,8 @@
     backToTopButton.hidden = true;
     backToTopButton.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5 4 13l1.41 1.41L11 8.83V20h2V8.83l5.59 5.58L20 13l-8-8Z"/></svg>';
 
-    const protectedContent = document.querySelectorAll("#project-form, footer");
-
     const updateBackToTopVisibility = () => {
       backToTopButton.hidden = window.scrollY <= 300;
-
-      const actionsRect = actions.getBoundingClientRect();
-      const overlapsProtectedContent = Array.from(protectedContent).some((element) => {
-        const contentRect = element.getBoundingClientRect();
-        return actionsRect.left < contentRect.right
-          && actionsRect.right > contentRect.left
-          && actionsRect.top < contentRect.bottom
-          && actionsRect.bottom > contentRect.top;
-      });
-
-      actions.classList.toggle("is-obscured", overlapsProtectedContent);
     };
 
     window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });

@@ -750,10 +750,6 @@ html.dark :focus-visible {
   gap: 0.75rem;
 }
 
-.floating-actions.is-obscured {
-  visibility: hidden;
-}
-
 .floating-action {
   display: flex;
   width: 3.25rem;
@@ -805,6 +801,10 @@ html.dark :focus-visible {
 
 .floating-action[hidden] {
   display: none;
+}
+
+footer {
+  padding-bottom: calc(10rem + env(safe-area-inset-bottom)) !important;
 }
 
 html.dark .floating-action:focus-visible {
