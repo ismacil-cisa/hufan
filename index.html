@@ -137,6 +137,14 @@
 
     <script src="./js/theme-init.js"></script>
     <link rel="stylesheet" href="./css/output.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
 
     <!-- =========================================================
        FONT AWESOME
@@ -321,7 +329,7 @@
     ====================================================== -->
       <section
         id="hero"
-        class="relative isolate overflow-hidden px-6 pb-24 pt-20 md:px-10 md:pb-32 md:pt-28"
+        class="relative isolate overflow-hidden px-6 pb-16 pt-14 md:px-10 md:pb-20 md:pt-16"
       >
         <!-- Animated Background -->
         <div
@@ -336,8 +344,8 @@
           class="hero-grid pointer-events-none absolute inset-0 -z-20 opacity-40"
         ></div>
 
-        <div class="mx-auto max-w-6xl">
-          <div class="max-w-4xl">
+        <div class="hero-layout mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+          <div class="max-w-3xl">
             <div
               class="mb-6 inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-neutral-600"
             >
@@ -345,7 +353,7 @@
             </div>
 
             <h1
-              class="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-neutral-950 sm:text-6xl md:text-7xl lg:text-8xl"
+              class="max-w-4xl text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-neutral-950 sm:text-6xl md:text-7xl"
             >
               We build digital experiences that matter.
             </h1>
@@ -375,8 +383,67 @@
             </div>
           </div>
 
+          <div class="hero-visual">
+            <div class="hero-artwork" aria-hidden="true">
+              <div class="hero-visual-glow"></div>
+              <div class="hero-orbit hero-orbit-one"></div>
+              <div class="hero-orbit hero-orbit-two"></div>
+
+              <div class="hero-device">
+                <div class="hero-device-bar">
+                  <span class="hero-window-dots"><i></i><i></i><i></i></span>
+                  <span>HUFAN / DIGITAL STUDIO</span>
+                  <span class="hero-device-menu">•••</span>
+                </div>
+
+                <div class="hero-device-content">
+                  <div class="hero-device-sidebar">
+                    <span class="hero-sidebar-mark">H</span>
+                    <i class="is-active"></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                  </div>
+
+                  <div class="hero-interface">
+                    <div class="hero-interface-top">
+                      <span>Digital experience</span>
+                      <span class="hero-interface-status"><i></i> In focus</span>
+                    </div>
+                    <div class="hero-interface-title">
+                      <span></span><span></span>
+                    </div>
+
+                    <div class="hero-interface-canvas">
+                      <div class="hero-canvas-orbit"><i></i><b></b></div>
+                      <div class="hero-canvas-lines"><i></i><i></i><i></i></div>
+                      <span class="hero-canvas-caption">IDEAS, MADE DIGITAL</span>
+                    </div>
+
+                    <div class="hero-interface-footer">
+                      <span><i></i> Design</span>
+                      <span><i></i> Development</span>
+                      <span><i></i> Technology</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero-float-card hero-float-card-top">
+                <span class="hero-float-icon">✳</span>
+                <span><b>Thoughtful by design</b><small>Purposeful digital work</small></span>
+              </div>
+
+              <div class="hero-float-card hero-float-card-bottom">
+                <span class="hero-float-progress"><i></i></span>
+                <span><b>Built for what’s next</b><small>Clarity · Craft · Technology</small></span>
+              </div>
+            </div>
+
+          </div>
+
           <div
-            class="mt-20 flex flex-col gap-5 border-t border-neutral-200 pt-6 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between"
+            class="hero-footnote flex flex-col gap-5 border-t border-neutral-200 pt-6 text-sm text-neutral-500 sm:flex-row sm:items-center sm:justify-between lg:col-span-2"
           >
             <p>Digital-first. Built for what's next.</p>
 
@@ -681,9 +748,9 @@
           </div>
 
           <!-- Services Grid -->
-          <div class="services-reveal mt-16 grid gap-4 md:grid-cols-2">
+          <div class="services-reveal services-grid mt-16 grid gap-4 md:grid-cols-2">
             <article
-              class="rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              class="service-card rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex items-center justify-between">
                 <div
@@ -726,7 +793,7 @@
             </article>
 
             <article
-              class="rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              class="service-card rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex items-center justify-between">
                 <div
@@ -769,7 +836,7 @@
             </article>
 
             <article
-              class="rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              class="service-card rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex items-center justify-between">
                 <div
@@ -812,7 +879,7 @@
             </article>
 
             <article
-              class="rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              class="service-card rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex items-center justify-between">
                 <div
@@ -854,7 +921,7 @@
               </div>
             </article>
             <article
-              class="rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              class="service-card rounded-3xl border border-neutral-200 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div class="flex items-center justify-between">
                 <div
@@ -1101,11 +1168,11 @@
           <div class="projects-reveal mt-16 grid gap-6">
             <!-- Tamaam Hospital -->
             <article
-              class="overflow-hidden rounded-3xl border border-neutral-200 bg-white"
+              class="project-card overflow-hidden rounded-3xl border border-neutral-200 bg-white"
             >
               <div class="grid md:grid-cols-2">
                 <div
-                  class="aspect-[16/10] overflow-hidden bg-neutral-200 md:aspect-auto"
+                  class="project-visual aspect-[16/10] overflow-hidden bg-neutral-200 md:aspect-auto"
                 >
                   <img
                     src="./assets/images/projects/tamaam-hospital.png"
@@ -1185,11 +1252,11 @@
 
             <!-- Skyline Construction -->
             <article
-              class="overflow-hidden rounded-3xl border border-neutral-200 bg-white"
+              class="project-card overflow-hidden rounded-3xl border border-neutral-200 bg-white"
             >
               <div class="grid md:grid-cols-2">
                 <div
-                  class="aspect-[16/10] overflow-hidden bg-neutral-200 md:order-2 md:aspect-auto"
+                  class="project-visual aspect-[16/10] overflow-hidden bg-neutral-200 md:order-2 md:aspect-auto"
                 >
                   <img
                     src="./assets/images/projects/Skyline.png"
@@ -1265,11 +1332,11 @@
 
             <!-- Savior Haven -->
             <article
-              class="overflow-hidden rounded-3xl border border-neutral-200 bg-white"
+              class="project-card overflow-hidden rounded-3xl border border-neutral-200 bg-white"
             >
               <div class="grid md:grid-cols-2">
                 <div
-                  class="aspect-[16/10] overflow-hidden bg-neutral-200 md:aspect-auto"
+                  class="project-visual aspect-[16/10] overflow-hidden bg-neutral-200 md:aspect-auto"
                 >
                   <img
                     src="./assets/images/projects/Savior-res.png"
@@ -1501,10 +1568,10 @@
             >
               <div class="flex items-center gap-4">
                 <img
-                  src="./assets/images/Sabirin%20Jamal.png"
-                  alt="Portrait of HUFAN client Sabirin Jamal"
-                  width="720"
-                  height="1041"
+                  src="./assets/images/Asma%20Mohamed.png"
+                  alt="Portrait of HUFAN client Asma Mohamed"
+                  width="1254"
+                  height="1254"
                   class="testimonial-portrait h-40 w-32 shrink-0 rounded-2xl object-cover object-center"
                   loading="lazy"
                   decoding="async"
@@ -1512,7 +1579,7 @@
 
                 <div>
                   <h3 class="text-base font-semibold text-neutral-950"                  >
-                    Sabirin Jamal
+                    Asma Mohamed
                   </h3>
                   <p
                     class="mt-1 text-sm text-neutral-600"
@@ -1827,6 +1894,47 @@
         </div>
       </section>
     </main>
+
+    <div class="welcome-rope-layer" data-welcome-rope-layer hidden>
+      <svg
+        class="welcome-rope"
+        data-welcome-rope
+        viewBox="0 0 4 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path class="welcome-rope-shadow" d="M2 0 C0.5 28 3.5 70 2 100" pathLength="1" />
+        <path class="welcome-rope-highlight" d="M2 0 C0.5 28 3.5 70 2 100" pathLength="1" />
+        <path class="welcome-rope-core" d="M2 0 C0.5 28 3.5 70 2 100" pathLength="1" />
+      </svg>
+    </div>
+    <div class="hero-welcome" data-hero-welcome hidden>
+      <div class="welcome-ground-shadow" aria-hidden="true"></div>
+      <div class="welcome-impact" aria-hidden="true"></div>
+      <div class="welcome-portrait">
+        <img
+          src="./assets/images/hero.png"
+          alt=""
+          width="1024"
+          height="1536"
+          decoding="async"
+          loading="lazy"
+          data-welcome-character
+        />
+      </div>
+      <div class="welcome-bubble" data-i18n="welcome.greeting" aria-live="polite">
+        Welcome! Let's build something amazing.
+      </div>
+      <button
+        class="welcome-dismiss"
+        type="button"
+        data-welcome-dismiss
+        aria-label="Dismiss welcome"
+      >
+        <span data-i18n="welcome.skip">Skip</span>
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
 
     <!-- =====================================================
        FOOTER

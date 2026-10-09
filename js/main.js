@@ -14,6 +14,9 @@
       "nav.talk": "Let's Talk",
       "nav.openMenu": "Open menu",
       "nav.closeMenu": "Close menu",
+      "welcome.greeting": "Welcome! Let's build something amazing.",
+      "welcome.skip": "Skip",
+      "welcome.dismiss": "Dismiss welcome",
       "testimonials.eyebrow": "Client Stories & Project Work",
       "testimonials.heading": "Real projects. Client voices shared with permission.",
       "testimonials.description": "Thoughtful digital work, shaped around each client’s needs and delivered with care.",
@@ -59,6 +62,9 @@
       "nav.talk": "La hadal",
       "nav.openMenu": "Fura liiska",
       "nav.closeMenu": "Xir liiska",
+      "welcome.greeting": "Soo dhawoow! Ku soo biir HUFAN.",
+      "welcome.skip": "Ka bood",
+      "welcome.dismiss": "Xir soo dhaweynta",
       "testimonials.eyebrow": "Sheekooyinka Macaamiisha iyo Shaqada",
       "testimonials.heading": "Mashruucyo dhab ah. Ra'yiga macaamiisha oo oggolaansho leh.",
       "testimonials.description": "Shaqooyin dijitaal ah oo xeeldheer, ku dhisan baahida macmiil kasta, laguna dhammeeyo taxaddar.",
@@ -438,6 +444,18 @@
       button.dataset.language = language;
     });
 
+    const welcomeDismissButton = document.querySelector("[data-welcome-dismiss]");
+    if (welcomeDismissButton) {
+      welcomeDismissButton.setAttribute("aria-label", getTranslationText(language, "welcome.dismiss"));
+    }
+
+    const welcomeCharacter = document.querySelector("[data-welcome-character]");
+    if (welcomeCharacter) {
+      welcomeCharacter.alt = language === "so"
+        ? "HUFAN oo soo dhaweynaya booqdaha"
+        : "HUFAN welcoming a visitor";
+    }
+
     const elements = document.querySelectorAll("[data-i18n]");
     elements.forEach((element) => {
       const key = element.dataset.i18n;
@@ -706,6 +724,213 @@
     }
   };
 
+  const setupHeroWelcome = () => {
+    const welcome = document.querySelector("[data-hero-welcome]");
+    const ropeLayer = document.querySelector("[data-welcome-rope-layer]");
+    const character = welcome?.querySelector("[data-welcome-character]");
+    const dismissButton = welcome?.querySelector("[data-welcome-dismiss]");
+
+    if (!welcome || !ropeLayer || !character || !dismissButton) {
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    let prepareTimer;
+    let completionTimer;
+    let resizeFrame;
+    let isRemoved = false;
+    const removeWelcome = () => {
+      if (isRemoved) {
+        return;
+      }
+
+      isRemoved = true;
+      window.clearTimeout(prepareTimer);
+      window.clearTimeout(completionTimer);
+      window.cancelAnimationFrame(resizeFrame);
+      welcome.removeEventListener("animationend", handleAnimationEnd);
+      character.removeEventListener("load", startWelcome);
+      character.removeEventListener("error", handleImageError);
+      window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("orientationchange", handleViewportChange);
+      ropeLayer.remove();
+      welcome.remove();
+    };
+
+    const handleAnimationEnd = (event) => {
+      if (event.target === character.parentElement && event.animationName === "welcome-flight") {
+        removeWelcome();
+      }
+    };
+
+    const handleImageError = () => {
+      console.warn("The HUFAN welcome animation was skipped because assets/images/hero.png could not be loaded.");
+      removeWelcome();
+    };
+
+    const updateWelcomeLayout = () => {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const portrait = character.parentElement;
+      portrait.style.removeProperty("width");
+      portrait.style.removeProperty("height");
+      const visual = document.querySelector(".hero-visual");
+      const visualBounds = visual?.getBoundingClientRect();
+      let characterWidth = portrait.offsetWidth;
+      let characterHeight = portrait.offsetHeight;
+      const rightEdge = Math.min(
+        visualBounds?.right ?? viewportWidth - 24,
+        viewportWidth - 16,
+      );
+      const left = Math.max(viewportWidth * 0.56, rightEdge - characterWidth);
+      const visualBottom = visualBounds?.bottom ?? viewportHeight * 0.8;
+      const top = Math.min(
+        visualBottom - characterHeight,
+        viewportHeight - characterHeight - 12,
+      );
+      let landingLeft = Math.max(12, Math.min(left, viewportWidth - characterWidth - 12));
+      let landingTop = Math.max(12, top);
+
+      if (viewportWidth <= 767 && viewportHeight > viewportWidth) {
+        const heading = document.querySelector("#hero h1");
+        const cta = document.querySelector("#hero a[href='#contact']");
+        const headingBottom = heading?.getBoundingClientRect().bottom ?? 0;
+        const ctaTop = cta?.getBoundingClientRect().top ?? viewportHeight;
+        const safeTop = Math.max(12, headingBottom + 8);
+        const safeBottom = Math.min(ctaTop - 8, viewportHeight - 12);
+        const availableHeight = safeBottom - safeTop;
+
+        if (availableHeight > 0 && availableHeight < characterHeight) {
+          characterHeight = availableHeight;
+          characterWidth = Math.min(characterWidth, characterHeight * 2 / 3);
+          characterHeight = characterWidth * 3 / 2;
+          portrait.style.width = `${characterWidth}px`;
+          portrait.style.height = `${characterHeight}px`;
+        }
+
+        landingTop = availableHeight > 0 && availableHeight <= viewportHeight
+          ? safeTop
+          : landingTop;
+      } else if (viewportWidth <= 1023 && viewportHeight <= 600) {
+        const heading = document.querySelector("#hero h1");
+        const textRange = document.createRange();
+        if (heading) {
+          textRange.selectNodeContents(heading);
+        }
+        const textRects = heading ? Array.from(textRange.getClientRects()) : [];
+        const textRight = textRects.length
+          ? Math.max(...textRects.map((rect) => rect.right))
+          : 0;
+        const safeWidth = viewportWidth - textRight - 20;
+
+        if (safeWidth > 0 && safeWidth < characterWidth) {
+          characterWidth = Math.max(32, safeWidth);
+          characterHeight = characterWidth * 3 / 2;
+          portrait.style.width = `${characterWidth}px`;
+          portrait.style.height = `${characterHeight}px`;
+        }
+
+        landingLeft = Math.max(
+          12,
+          Math.min(viewportWidth - characterWidth - 12, Math.max(left, textRight + 8)),
+        );
+      }
+
+      portrait.style.left = `${landingLeft}px`;
+      portrait.style.top = `${landingTop}px`;
+
+      const rope = ropeLayer.querySelector("[data-welcome-rope]");
+      if (rope) {
+        rope.style.left = `${landingLeft + characterWidth * 0.16}px`;
+        rope.style.height = `${Math.max(24, landingTop + characterHeight * 0.34)}px`;
+      }
+
+      const impact = welcome.querySelector(".welcome-impact");
+      const groundShadow = welcome.querySelector(".welcome-ground-shadow");
+      [impact, groundShadow].forEach((effect) => {
+        if (effect) {
+          effect.style.left = `${landingLeft + characterWidth * 0.05}px`;
+          effect.style.top = `${landingTop + characterHeight * 0.91}px`;
+          effect.style.width = `${characterWidth * 0.9}px`;
+        }
+      });
+
+      const bubble = welcome.querySelector(".welcome-bubble");
+      if (bubble) {
+        const bubbleWidth = Math.min(240, viewportWidth * 0.58);
+        const bubbleHeight = bubble.getBoundingClientRect().height;
+        let bubbleLeft = Math.max(12, Math.min(landingLeft - bubbleWidth * 0.08, viewportWidth - bubbleWidth - 12));
+        let bubbleTop = Math.max(64, Math.min(landingTop + characterHeight * 0.12, viewportHeight - bubbleHeight - 12));
+
+        if (viewportWidth <= 1023 && viewportHeight <= 600) {
+          const heading = document.querySelector("#hero h1");
+          const textRange = document.createRange();
+          if (heading) {
+            textRange.selectNodeContents(heading);
+          }
+          const textRects = heading ? Array.from(textRange.getClientRects()) : [];
+          const headingTextTop = textRects.length
+            ? Math.min(...textRects.map((rect) => rect.top))
+            : (heading?.getBoundingClientRect().top ?? viewportHeight);
+          bubbleLeft = Math.max(12, Math.min(viewportWidth - bubbleWidth - 12, landingLeft));
+          bubbleTop = Math.max(12, headingTextTop - bubbleHeight - 8);
+        }
+
+        bubble.style.left = `${bubbleLeft}px`;
+        bubble.style.top = `${bubbleTop}px`;
+      }
+    };
+
+    const handleViewportChange = () => {
+      if (!welcome.classList.contains("is-running")) {
+        return;
+      }
+
+      window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = window.requestAnimationFrame(updateWelcomeLayout);
+    };
+
+    const startWelcome = () => {
+      if (isRemoved) {
+        return;
+      }
+
+      if (character.naturalWidth === 0) {
+        handleImageError();
+        return;
+      }
+
+      updateWelcomeLayout();
+      welcome.getBoundingClientRect();
+      welcome.addEventListener("animationend", handleAnimationEnd);
+      welcome.classList.add("is-positioned");
+      welcome.classList.add("is-running");
+      ropeLayer.classList.add("is-positioned");
+      ropeLayer.classList.add("is-running");
+      window.addEventListener("resize", handleViewportChange, { passive: true });
+      window.addEventListener("orientationchange", handleViewportChange, { passive: true });
+      completionTimer = window.setTimeout(removeWelcome, 4550);
+    };
+
+    prepareTimer = window.setTimeout(() => {
+      welcome.hidden = false;
+      ropeLayer.hidden = false;
+      if (character.complete) {
+        startWelcome();
+        return;
+      }
+
+      character.addEventListener("load", startWelcome, { once: true });
+      character.addEventListener("error", handleImageError, { once: true });
+    }, 300);
+
+    dismissButton.addEventListener("click", removeWelcome, { once: true });
+  };
+
   const setupScrollReveal = () => {
     const revealElements = document.querySelectorAll(".about-reveal, .services-reveal, .projects-reveal, .contact-reveal, .footer-reveal");
 
@@ -884,6 +1109,7 @@
     setupNavbarScrollEffect();
     setupFloatingActions();
     setupHeroMotion();
+    setupHeroWelcome();
     setupScrollReveal();
     ensureNavigationControls();
 
